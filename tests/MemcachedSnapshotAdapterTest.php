@@ -31,7 +31,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
         $m->addServer('localhost', 11211);
 
         $adapter = new MemcachedSnapshotAdapter($m);
-        
+
         $aggregateType = AggregateType::fromString('foo');
 
         $aggregateRoot = new \stdClass();
