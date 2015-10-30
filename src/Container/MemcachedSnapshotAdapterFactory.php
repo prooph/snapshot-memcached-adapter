@@ -33,7 +33,7 @@ final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresM
     public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('config');
-        $config = $this->options($config)['snapshot_adapter']['options'];
+        $config = $this->options($config)['adapter']['options'];
 
         if (isset($config['memcached_connection_alias'])) {
             $memcached = $container->get($config['memcached_connection_alias']);
@@ -59,7 +59,7 @@ final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresM
      */
     public function packageName()
     {
-        return 'event_store';
+        return 'snapshot_store';
     }
 
     /**
@@ -67,7 +67,7 @@ final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresM
      */
     public function mandatoryOptions()
     {
-        return ['snapshot_adapter'];
+        return ['adapter'];
     }
 
     /**
@@ -76,7 +76,7 @@ final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresM
     public function defaultOptions()
     {
         return [
-            'snapshot_adapter' => [
+            'adapter' => [
                 'options' => [
                     'persistent_id' => null,
                     'servers' => [

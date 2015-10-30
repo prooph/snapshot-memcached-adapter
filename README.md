@@ -6,8 +6,15 @@ Memcached Adapter for the Snapshot Store
 [![Coverage Status](https://coveralls.io/repos/prooph/snapshot-memcached-adapter/badge.svg?branch=master&service=github)](https://coveralls.io/github/prooph/snapshot-memcached-adapter?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/prooph/improoph)
 
-Configuration
--------------
+## Set Up
+
+How to use the adapter is explained in the [prooph/event-store docs](https://github.com/prooph/event-store/blob/master/docs/snapshots.md).
+
+## Interop Factory
+
+Some general notes about how to use interop factories shipped with prooph components can be found in the [event store docs](https://github.com/prooph/event-store/blob/master/docs/interop_factories.md).
+Use the [memcached snapshot adapter factory](src/Container/MemcachedSnapshotAdapterFactory.php) to set up the adapter. If your IoC container supports callable factories
+you can register the factory under a service id of your choice and configure this service id as `$config['prooph']['snapshot_store']['adpater']['type'] = <adapter_service_id>`.
 
 Support
 -------

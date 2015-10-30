@@ -31,8 +31,8 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
         $container = $this->prophesize(ContainerInterface::class);
         $container->get('config')->willReturn([
             'prooph' => [
-                'event_store' => [
-                    'snapshot_adapter' => [
+                'snapshot_store' => [
+                    'adapter' => [
                         'type' => MemcachedSnapshotAdapter::class,
                     ]
                 ]
@@ -53,8 +53,8 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
         $container = $this->prophesize(ContainerInterface::class);
         $container->get('config')->willReturn([
             'prooph' => [
-                'event_store' => [
-                    'snapshot_adapter' => [
+                'snapshot_store' => [
+                    'adapter' => [
                         'type' => MemcachedSnapshotAdapter::class,
                         'options' => [
                             'servers' => [
@@ -91,8 +91,8 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
         $container->get('memcached_client')->willReturn($memcached);
         $container->get('config')->willReturn([
             'prooph' => [
-                'event_store' => [
-                    'snapshot_adapter' => [
+                'snapshot_store' => [
+                    'adapter' => [
                         'type' => MemcachedSnapshotAdapter::class,
                         'options' => [
                             'memcached_connection_alias' => 'memcached_client'
