@@ -25,7 +25,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
     /**
      * @test
      */
-    public function it_adds_and_reads()
+    public function it_saves_and_reads()
     {
         $m = new \Memcached();
         $m->addServer('localhost', 11211);
@@ -45,7 +45,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
 
         $snapshot = new Snapshot($aggregateType, 'id', $aggregateRoot, 1, $now);
 
-        $adapter->add($snapshot);
+        $adapter->save($snapshot);
 
         $this->assertNull($adapter->get($aggregateType, 'invalid'));
 
