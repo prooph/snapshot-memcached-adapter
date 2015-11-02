@@ -64,12 +64,12 @@ final class MemcachedSnapshotAdapter implements Adapter
     }
 
     /**
-     * Add a snapshot
+     * Save a snapshot
      *
      * @param Snapshot $snapshot
      * @return void
      */
-    public function add(Snapshot $snapshot)
+    public function save(Snapshot $snapshot)
     {
         $key = $this->getShortAggregateTypeName($snapshot->aggregateType()) . '_' . $snapshot->aggregateId();
 
