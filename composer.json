@@ -1,7 +1,7 @@
 {
     "name": "prooph/snapshot-memcached-adapter",
     "description": "Snapshot Memcached Adapter for ProophEventStore",
-    "homepage": "https://github.com/prooph/snapshot-memcached-adapter",
+    "homepage": "http://getprooph.org/",
     "license": "BSD-3-Clause",
     "authors": [
         {
