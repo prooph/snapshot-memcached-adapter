@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Prooph\EventStore\Snapshot\Adapter\Memcached;
 
 use DateTimeImmutable;
@@ -28,29 +30,19 @@ final class MemcachedSnapshotAdapter implements Adapter
      */
     private $memcached;
 
-    /**
-     * @param Memcached $memcached
-     */
     public function __construct(Memcached $memcached)
     {
         $this->memcached = $memcached;
     }
 
-    /**
-     * Get the aggregate root if it exists otherwise null
-     *
-     * @param AggregateType $aggregateType
-     * @param string $aggregateId
-     * @return Snapshot
-     */
-    public function get(AggregateType $aggregateType, $aggregateId)
+    public function get(AggregateType $aggregateType, string $aggregateId): ?Snapshot
     {
         $key = $this->getShortAggregateTypeName($aggregateType) . '_' . $aggregateId;
 
         $data = $this->memcached->get($key);
 
         if (false === $data) {
-            return;
+            return null;
         }
 
         return new Snapshot(
@@ -62,13 +54,7 @@ final class MemcachedSnapshotAdapter implements Adapter
         );
     }
 
-    /**
-     * Save a snapshot
-     *
-     * @param Snapshot $snapshot
-     * @return void
-     */
-    public function save(Snapshot $snapshot)
+    public function save(Snapshot $snapshot): void
     {
         $key = $this->getShortAggregateTypeName($snapshot->aggregateType()) . '_' . $snapshot->aggregateId();
 
@@ -83,11 +69,7 @@ final class MemcachedSnapshotAdapter implements Adapter
         $this->memcached->set($key, $data);
     }
 
-    /**
-     * @param AggregateType $aggregateType
-     * @return string
-     */
-    private function getShortAggregateTypeName(AggregateType $aggregateType)
+    private function getShortAggregateTypeName(AggregateType $aggregateType): string
     {
         $aggregateTypeName = str_replace('-', '_', $aggregateType->toString());
         return implode('', array_slice(explode('\\', $aggregateTypeName), -1));

@@ -8,31 +8,70 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Prooph\EventStore\Snapshot\Adapter\Memcached\Container;
 
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
+use Interop\Config\RequiresConfigId;
 use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
+use Prooph\EventStore\Exception\InvalidArgumentException;
 use Prooph\EventStore\Snapshot\Adapter\Memcached\MemcachedSnapshotAdapter;
 
 /**
  * Class MemcachedSnapshotAdapterFactory
  * @package Prooph\EventStore\Snapshot\Adapter\Memcached\Container
  */
-final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresMandatoryOptions, ProvidesDefaultOptions
+final class MemcachedSnapshotAdapterFactory implements
+    ProvidesDefaultOptions,
+    RequiresConfig,
+    RequiresConfigId,
+    RequiresMandatoryOptions
 {
     use ConfigurationTrait;
 
     /**
-     * @param ContainerInterface $container
-     * @return MemcachedSnapshotAdapter
+     * @var string
      */
-    public function __invoke(ContainerInterface $container)
+    private $configId;
+
+    /**
+     * Creates a new instance from a specified config, specifically meant to be used as static factory.
+     *
+     * In case you want to use another config key than provided by the factories, you can add the following factory to
+     * your config:
+     *
+     * <code>
+     * <?php
+     * return [
+     *     'prooph.snaptshot_store.service_name' => [MemcachedSnapshotAdapterFactory::class, 'service_name'],
+     * ];
+     * </code>
+     *
+     * @throws InvalidArgumentException
+     */
+    public static function __callStatic(string $name, array $arguments): MemcachedSnapshotAdapter
+    {
+        if (! isset($arguments[0]) || ! $arguments[0] instanceof ContainerInterface) {
+            throw new InvalidArgumentException(
+                sprintf('The first argument must be of type %s', ContainerInterface::class)
+            );
+        }
+        return (new static($name))->__invoke($arguments[0]);
+    }
+
+    public function __construct(string $configId = 'default')
+    {
+        $this->configId = $configId;
+    }
+
+    public function __invoke(ContainerInterface $container): MemcachedSnapshotAdapter
     {
         $config = $container->get('config');
-        $config = $this->options($config)['adapter']['options'];
+        $config = $this->options($config, $this->configId)['adapter']['options'];
 
         if (isset($config['memcached_connection_alias'])) {
             $memcached = $container->get($config['memcached_connection_alias']);
@@ -45,26 +84,17 @@ final class MemcachedSnapshotAdapterFactory implements RequiresConfig, RequiresM
         return new MemcachedSnapshotAdapter($memcached);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function dimensions()
+    public function dimensions(): array
     {
         return ['prooph', 'snapshot_store'];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function mandatoryOptions()
+    public function mandatoryOptions(): array
     {
         return ['adapter'];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function defaultOptions()
+    public function defaultOptions(): array
     {
         return [
             'adapter' => [

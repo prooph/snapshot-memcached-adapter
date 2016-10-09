@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ProophTest\EventStore\Snapshot\Adpater\Memcached;
 
 use PHPUnit_Framework_TestCase as TestCase;
@@ -24,7 +26,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
     /**
      * @test
      */
-    public function it_saves_and_reads()
+    public function it_saves_and_reads(): void
     {
         $m = new \Memcached();
         $m->addServer('localhost', 11211);
@@ -36,7 +38,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
         $aggregateRoot = new \stdClass();
         $aggregateRoot->foo = 'bar';
 
-        $time = microtime(true);
+        $time = (string) microtime(true);
         if (false === strpos($time, '.')) {
             $time .= '.0000';
         }
