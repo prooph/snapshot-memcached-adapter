@@ -1,13 +1,14 @@
 <?php
-/*
- * This file is part of the prooph/snapshot-memached-adapter.
- * (c) 2014 - 2015 prooph software GmbH <contact@prooph.de>
+/**
+ * This file is part of the prooph/snapshot-memcached-adapter.
+ * (c) 2014-2016 prooph software GmbH <contact@prooph.de>
+ * (c) 2015-2016 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Date: 10/21/15 - 20:10
  */
+
+declare(strict_types=1);
 
 namespace ProophTest\EventStore\Snapshot\Adpater\Memcached;
 
@@ -25,7 +26,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
     /**
      * @test
      */
-    public function it_saves_and_reads()
+    public function it_saves_and_reads(): void
     {
         $m = new \Memcached();
         $m->addServer('localhost', 11211);
@@ -37,7 +38,7 @@ final class MemcachedSnapshotAdapterTest extends TestCase
         $aggregateRoot = new \stdClass();
         $aggregateRoot->foo = 'bar';
 
-        $time = microtime(true);
+        $time = (string) microtime(true);
         if (false === strpos($time, '.')) {
             $time .= '.0000';
         }

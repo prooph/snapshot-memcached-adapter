@@ -1,13 +1,14 @@
 <?php
-/*
- * This file is part of the prooph/snapshot-memached-adapter.
- * (c) 2014 - 2015 prooph software GmbH <contact@prooph.de>
+/**
+ * This file is part of the prooph/snapshot-memcached-adapter.
+ * (c) 2014-2016 prooph software GmbH <contact@prooph.de>
+ * (c) 2015-2016 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Date: 10/18/15 - 20:27
  */
+
+declare(strict_types=1);
 
 namespace ProophTest\EventStore\Snapshot\Adapter\Memcached\Container;
 
@@ -24,19 +25,20 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
 {
     /**
      * @test
-     * @group my
      */
-    public function it_creates_adapter_with_minimum_settings()
+    public function it_creates_adapter_with_minimum_settings(): void
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get('config')->willReturn([
             'prooph' => [
                 'snapshot_store' => [
-                    'adapter' => [
-                        'type' => MemcachedSnapshotAdapter::class,
-                    ]
-                ]
-            ]
+                    'default' => [
+                        'adapter' => [
+                            'type' => MemcachedSnapshotAdapter::class,
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $factory = new MemcachedSnapshotAdapterFactory();
@@ -48,30 +50,56 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
     /**
      * @test
      */
-    public function it_creates_adapter_with_maximum_settings()
+    public function it_creates_adapter_with_minimum_settings_via_callstatic(): void
     {
         $container = $this->prophesize(ContainerInterface::class);
         $container->get('config')->willReturn([
             'prooph' => [
                 'snapshot_store' => [
-                    'adapter' => [
-                        'type' => MemcachedSnapshotAdapter::class,
-                        'options' => [
-                            'servers' => [
-                                [
-                                    'localhost',
-                                    11211,
-                                    0
-                                ]
+                    'another' => [
+                        'adapter' => [
+                            'type' => MemcachedSnapshotAdapter::class,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $type = 'another';
+        $adapter = MemcachedSnapshotAdapterFactory::$type($container->reveal());
+
+        $this->assertInstanceOf(MemcachedSnapshotAdapter::class, $adapter);
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_adapter_with_maximum_settings(): void
+    {
+        $container = $this->prophesize(ContainerInterface::class);
+        $container->get('config')->willReturn([
+            'prooph' => [
+                'snapshot_store' => [
+                    'default' => [
+                        'adapter' => [
+                            'type' => MemcachedSnapshotAdapter::class,
+                            'options' => [
+                                'servers' => [
+                                    [
+                                        'localhost',
+                                        11211,
+                                        0
+                                    ]
+                                ],
+                                'memcached_options' => [
+                                    \Memcached::SERIALIZER_PHP
+                                ],
+                                'persistent_id' => 'test'
                             ],
-                            'memcached_options' => [
-                                \Memcached::SERIALIZER_PHP
-                            ],
-                            'persistent_id' => 'test'
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $factory = new MemcachedSnapshotAdapterFactory();
@@ -83,7 +111,7 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
     /**
      * @test
      */
-    public function it_will_use_memcached_connection_alias()
+    public function it_will_use_memcached_connection_alias(): void
     {
         $memcached = new \Memcached();
 
@@ -92,14 +120,16 @@ final class MemcachedSnapshotAdapterFactoryTest extends TestCase
         $container->get('config')->willReturn([
             'prooph' => [
                 'snapshot_store' => [
-                    'adapter' => [
-                        'type' => MemcachedSnapshotAdapter::class,
-                        'options' => [
-                            'memcached_connection_alias' => 'memcached_client'
-                        ]
-                    ]
-                ]
-            ]
+                    'default' => [
+                        'adapter' => [
+                            'type' => MemcachedSnapshotAdapter::class,
+                            'options' => [
+                                'memcached_connection_alias' => 'memcached_client'
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $factory = new MemcachedSnapshotAdapterFactory();
