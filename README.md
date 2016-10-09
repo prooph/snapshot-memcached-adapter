@@ -10,6 +10,28 @@ Memcached Adapter for the Snapshot Store
 
 How to use the adapter is explained in the [prooph/event-store docs](https://github.com/prooph/event-store/blob/master/docs/snapshots.md).
 
+## Notes about memcached
+
+Currently there is no final php-memcached release supporting PHP 7.
+
+If you want to use this library use the php7 development branch of php-memached.
+
+Usage in production is not recommended.
+
+### php-memcached installation
+
+```
+git clone https://github.com/php-memcached-dev/php-memcached.git
+cd php-memcached
+git checkout -b php7 origin/php7
+phpize
+./configure
+make
+sudo make install
+```
+
+add `extension=memcached.so` to your php.ini.
+
 ## Interop Factory
 
 Some general notes about how to use interop factories shipped with prooph components can be found in the [event store docs](https://github.com/prooph/event-store/blob/master/docs/interop_factories.md).
