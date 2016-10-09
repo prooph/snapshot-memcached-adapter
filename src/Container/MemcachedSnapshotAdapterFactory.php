@@ -16,7 +16,6 @@ use Interop\Config\ConfigurationTrait;
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfig;
 use Interop\Config\RequiresConfigId;
-use Interop\Config\RequiresMandatoryOptions;
 use Interop\Container\ContainerInterface;
 use Prooph\EventStore\Exception\InvalidArgumentException;
 use Prooph\EventStore\Snapshot\Adapter\Memcached\MemcachedSnapshotAdapter;
@@ -28,8 +27,7 @@ use Prooph\EventStore\Snapshot\Adapter\Memcached\MemcachedSnapshotAdapter;
 final class MemcachedSnapshotAdapterFactory implements
     ProvidesDefaultOptions,
     RequiresConfig,
-    RequiresConfigId,
-    RequiresMandatoryOptions
+    RequiresConfigId
 {
     use ConfigurationTrait;
 
@@ -87,11 +85,6 @@ final class MemcachedSnapshotAdapterFactory implements
     public function dimensions(): array
     {
         return ['prooph', 'snapshot_store'];
-    }
-
-    public function mandatoryOptions(): array
-    {
-        return ['adapter'];
     }
 
     public function defaultOptions(): array
