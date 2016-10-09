@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": "^7.1",
         "prooph/common": "dev-php_7_1 as 4.0",
         "prooph/event-store": "dev-php_7_1 as 7.0",
         "ext-memcached": ">=3.0.0b1"
