@@ -6,6 +6,8 @@ Memcached Adapter for the Snapshot Store
 [![Coverage Status](https://coveralls.io/repos/prooph/snapshot-memcached-adapter/badge.svg?branch=master&service=github)](https://coveralls.io/github/prooph/snapshot-memcached-adapter?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/prooph/improoph)
 
+#CAUTION: Support for the adapter will end at 31 December 2017. Use https://github.com/prooph/memcached-snapshot-store instead!
+
 ## Set Up
 
 How to use the adapter is explained in the [prooph/event-store docs](https://github.com/prooph/event-store/blob/master/docs/snapshots.md).
